@@ -11,6 +11,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
+import org.coursera.metrics.datadog.model.DatadogCounter;
 import org.coursera.metrics.datadog.model.DatadogGauge;
 import org.coursera.metrics.datadog.transport.Transport;
 import org.slf4j.Logger;
@@ -137,7 +138,7 @@ public class DatadogReporter extends ScheduledReporter {
   private void reportMetered(String name, Metered meter, long timestamp, List<String> tags)
       throws IOException {
     if (expansions.contains(Expansion.COUNT)) {
-      request.addGauge(new DatadogGauge(
+      request.addCounter(new DatadogCounter(
           appendExpansionSuffix(name, Expansion.COUNT),
           meter.getCount(),
           timestamp,
@@ -165,7 +166,7 @@ public class DatadogReporter extends ScheduledReporter {
     final Snapshot snapshot = histogram.getSnapshot();
 
     if (expansions.contains(Expansion.COUNT)) {
-      request.addGauge(new DatadogGauge(
+      request.addCounter(new DatadogCounter(
           appendExpansionSuffix(name, Expansion.COUNT),
           histogram.getCount(),
           timestamp,
